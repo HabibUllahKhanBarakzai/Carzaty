@@ -28,9 +28,9 @@ with open("dump_make_one_hot_encoder.pkl", "rb") as input_file:
 with open("dump_body_type_one_hot_encoder.pkl", "rb") as input_file:
     body_type_one_hot_encoder = pickle.load(input_file)
 
-mileage_value = 5000/60111
-engine_value = 2/3
-prediction_value = ["Mercedes-Benz", "C Class", 2017, mileage_value, engine_value, "Sedan"]
+mileage_value = 5000/380
+engine_value = 1.8/3
+prediction_value = ["Mercedes-Benz", "C Class", 2019, mileage_value, engine_value, "Convertible"]
 
 year = year_label_encoder.transform([prediction_value[2]])
 year = year_one_hot_encoder.transform([year]).toarray()
