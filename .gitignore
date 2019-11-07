@@ -138,3 +138,5 @@ dmypy.json
 .idea
 dogs-and-cats/
 charts_for_data_visualization/
+working_on_recurrent_neural_network/
+boston_housing_algorithm/

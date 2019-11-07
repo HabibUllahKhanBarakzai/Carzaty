@@ -1,8 +1,9 @@
 import pandas as pd
 import sqlalchemy
 import pickle
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, Normalizer, MinMaxScaler, StandardScaler
 import numpy as np
+import math
 
 
 def gathering_data_set():
@@ -14,7 +15,7 @@ def gathering_data_set():
 
     engine = sqlalchemy.create_engine("mysql+pymysql://habib:password@localhost:3306/carzaty")
 
-    query = '''select make_en, model_en, year, (5000/mileage) as mileage, (engine_capacity/3) as engine_capacity,
+    query = '''select make_en, model_en, year, (mileage) as mileage, (engine_capacity/3) as engine_capacity,
                 body_type_en, sales_price
                 from cars
                 where condition_en = 'used'
@@ -35,6 +36,15 @@ def gathering_data_set():
     data_set.model_en = model_label_encoder.fit_transform(data_set.model_en)
     data_set.make_en = make_label_encoder.fit_transform(data_set.make_en)
     data_set.body_type_en = body_label_encoder.fit_transform(data_set.body_type_en)
+    norm = np.array([data_set.mileage])
+    normalizer_object = Normalizer().fit(norm)
+    normalize_mileage = normalizer_object.transform(norm)
+
+    norm_value = np.square(norm[0])
+    norm_value = np.sum(norm_value)
+    norm_value = math.sqrt(norm_value)
+    final_array = norm[0]/norm_value
+    data_set.mileage = final_array
 
     dump_year_label_encoder = open("year_label_encoder.pkl", 'wb')
     pickle.dump(year_label_encoder, dump_year_label_encoder)
@@ -52,5 +62,8 @@ def gathering_data_set():
     pickle.dump(body_label_encoder, dump_body_label_encoder)
     dump_body_label_encoder.close()
 
+    print("norm value is   ", norm_value)
+
     return data_set, sales_price
+
 
